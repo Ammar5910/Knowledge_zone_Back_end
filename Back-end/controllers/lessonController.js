@@ -1,9 +1,16 @@
-const { getAllLessons, updateLesson } = require('../models/lessonModel');
+const { getAllLessons, updateLesson, searchLessons } = require('../models/lessonModel');
 
 const fetchLessons = async (req, res) => {
     try {
         const lessons = await getAllLessons();
-        res.json(lessons);
+        const lessonsWithImages = lessons.map((lesson) => ({
+            ...lesson,
+            imageUrl: lesson.name
+                ? `${req.protocol}://${req.get("host")}/static/images/${lesson.name.toLowerCase()}.jpg`
+                : null,
+        }));
+
+        res.json(lessonsWithImages);
     } catch (error) {
         res.status(500).json({ error: 'Failed to fetch lessons' });
     }
@@ -25,4 +32,26 @@ const modifyLesson = async (req, res) => {
     }
 };
 
-module.exports = { fetchLessons, modifyLesson };
+const search = async (req, res) => {
+    const { q: searchTerm, sortBy, order } = req.query;
+
+    if (!searchTerm) {
+        return res.status(400).json({ error: "Search term is required" });
+    }
+
+    try {
+        const results = await searchLessons(searchTerm, sortBy, order);
+        const lessonsWithImages = results.map((lesson) => ({
+            ...lesson,
+            imageUrl: lesson.name
+                ? `${req.protocol}://${req.get("host")}/static/images/${lesson.name.toLowerCase()}.jpg`
+                : null,
+        }));
+
+        res.json(lessonsWithImages);
+    } catch (error) {
+        res.status(500).json({ error: "Failed to perform search" });
+    }
+};
+
+module.exports = { fetchLessons, modifyLesson, search };
