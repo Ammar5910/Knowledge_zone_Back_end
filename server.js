@@ -17,6 +17,12 @@ app.use(bodyParser.json());
 app.use(morgan('dev'));
 app.use(loggerMiddleware);
 
+app.use ((req,res,next) => {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  next();
+})
+
+
 // Static Middleware for serving images
 app.use("/static/images", express.static(path.join(__dirname, "public", "images")));
 
