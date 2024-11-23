@@ -6,7 +6,7 @@ const fetchLessons = async (req, res) => {
         const lessonsWithImages = lessons.map((lesson) => ({
             ...lesson,
             imageUrl: lesson.name
-                ? `${req.protocol}://${req.get("host")}/static/images/${lesson.name.toLowerCase()}.jpg`
+                ? `${req.protocol}://${req.get("host")}/static/images/${lesson.name.toLowerCase()}.png`
                 : null,
         }));
 
@@ -44,7 +44,7 @@ const search = async (req, res) => {
         const lessonsWithImages = results.map((lesson) => ({
             ...lesson,
             imageUrl: lesson.name
-                ? `${req.protocol}://${req.get("host")}/static/images/${lesson.name.toLowerCase()}.jpg`
+                ? `${req.protocol}://${req.get("host")}/static/images/${lesson.name.toLowerCase()}.png`
                 : null,
         }));
 
