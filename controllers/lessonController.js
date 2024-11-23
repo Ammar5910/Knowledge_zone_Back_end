@@ -33,14 +33,15 @@ const modifyLesson = async (req, res) => {
 };
 
 const search = async (req, res) => {
-    const { q: searchTerm, sortBy, order } = req.query;
-
-    if (!searchTerm) {
-        return res.status(400).json({ error: "Search term is required" });
-    }
+    const { q: searchTerm = "", sortBy, order } = req.query;
 
     try {
-        const results = await searchLessons(searchTerm, sortBy, order);
+        const results = await searchLessons(
+            searchTerm.trim() ? searchTerm : null,
+            sortBy,
+            order
+        );
+
         const lessonsWithImages = results.map((lesson) => ({
             ...lesson,
             imageUrl: lesson.name
