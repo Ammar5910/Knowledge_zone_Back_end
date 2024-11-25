@@ -1,4 +1,4 @@
-// Import the createOrder function from the order model
+// Import the necessary functions from the order model
 const { createOrder } = require('../models/orderModel');
 
 // Controller to handle placing an order
@@ -28,5 +28,19 @@ const placeOrder = async (req, res) => {
     }
 };
 
-// Export the placeOrder controller to make it available for use in other parts of the application
-module.exports = { placeOrder };
+// Controller to handle fetching all orders
+const getOrders = async (req, res) => {
+    try {
+        // Retrieve all orders from the database
+        const orders = await global.db.collection('orders').find().toArray();
+
+        // Respond with the orders in JSON format
+        res.status(200).json(orders);
+    } catch (error) {
+        // Handle errors, such as database issues, and send a 500 Internal Server Error response
+        res.status(500).json({ error: 'Failed to fetch orders' });
+    }
+};
+
+// Export the controllers to make them available for use in other parts of the application
+module.exports = { placeOrder, getOrders };

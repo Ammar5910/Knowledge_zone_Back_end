@@ -4,4 +4,6 @@ The endpoint means Controller
 It communicates with the model to retrieve, update, or manipulate data stored in a database.
 
 # postman
-http://localhost:3000/api/lessons
+https://knowledge-zone-back-end.onrender.com
+https://knowledge-zone-back-end.onrender.com/api/orders
+https://knowledge-zone-back-end.onrender.com/api/lessons
