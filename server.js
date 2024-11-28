@@ -12,8 +12,10 @@ const path = require("path"); // Module for working with file and directory path
 const lessonRoutes = require('./routes/lessonRoutes');
 const orderRoutes = require('./routes/orderRoutes');
 
-// Import custom middleware
+// Import custom middlewares
 const { loggerMiddleware } = require('./middleware/logger');
+const { exceptionMiddleware } = require('./middleware/exceptionMiddleware');
+const { allowCorsOriginMiddleware } = require('./middleware/allowCorsOriginMiddleware');
 
 // Create an Express application
 const app = express();
@@ -24,24 +26,12 @@ const PORT = process.env.PORT || 3000;
 // Middleware for parsing JSON request bodies
 app.use(bodyParser.json());
 
-// Middleware for logging HTTP requests in development format
-app.use(morgan('dev'));
-
 // Custom middleware for logging details of each request
 app.use(loggerMiddleware);
 
 // Middleware to handle Cross-Origin Resource Sharing (CORS)
 // Allows requests from any origin and enables specific HTTP methods and headers
-app.use((req, res, next) => {
-    res.setHeader('Access-Control-Allow-Origin', '*'); // Allow all origins
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS'); // Allowed HTTP methods
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization'); // Allowed headers
-    if (req.method === 'OPTIONS') {
-        // Handle preflight requests
-        return res.sendStatus(200);
-    }
-    next(); // Continue to the next middleware or route handler
-});
+app.use(allowCorsOriginMiddleware);
 
 // Middleware to serve static image files from the "public/images" directory
 app.use("/static/images", express.static(path.join(__dirname, "public", "images")));
@@ -62,10 +52,7 @@ app.use("/static/images", (req, res) => {
 });
 
 // Default error handler for handling unexpected errors
-app.use((err, req, res, next) => {
-    console.error(err.stack); // Log the error stack trace
-    res.status(500).json({ error: "Something went wrong!" }); // Respond with a generic error message
-});
+app.use(exceptionMiddleware);
 
 // Start the server and listen on the specified port
 app.listen(PORT, () => {

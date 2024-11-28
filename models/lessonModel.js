@@ -1,15 +1,15 @@
 // Define the collection name for interacting with the database
-const collectionName = 'classes';
+const collectionName = 'lessons';
 
 // Function to retrieve all lessons from the database
 const getAllLessons = async () => {
-    // Use the global database connection to fetch all documents in the 'classes' collection
+    // Use the global database connection to fetch all documents in the 'lessons' collection
     return await global.db.collection(collectionName).find().toArray();
 };
 
 // Function to update a specific lesson in the database
 const updateLesson = async (id, updateData) => {
-    // Perform an update operation in the 'classes' collection
+    // Perform an update operation in the 'lessons' collection
     return await global.db
         .collection(collectionName)
         .updateOne(

@@ -3,8 +3,8 @@ const { ObjectId } = require("mongodb");
 
 // Function to create an order
 const createOrder = async (customer, lessons, paymentMethod) => {
-    // Get references to the 'classes' and 'orders' collections
-    const lessonCollection = global.db.collection("classes");
+    // Get references to the 'lessons' and 'orders' collections
+    const lessonCollection = global.db.collection("lessons");
     const orderCollection = global.db.collection("orders");
 
     try {
@@ -46,7 +46,7 @@ const createOrder = async (customer, lessons, paymentMethod) => {
         // Insert the order document into the 'orders' collection
         await orderCollection.insertOne(order);
 
-        // Update the availability of seats for each lesson in the 'classes' collection
+        // Update the availability of seats for each lesson in the 'lessons' collection
         for (const lesson of lessons) {
             await lessonCollection.updateOne(
                 { _id: new ObjectId(lesson.lessonId) }, // Match the lesson by its ID
