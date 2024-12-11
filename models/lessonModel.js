@@ -1,6 +1,9 @@
 // Define the collection name for interacting with the database
 const collectionName = 'lessons';
 
+const { ObjectId } = require("mongodb");
+
+
 // Function to retrieve all lessons from the database
 const getAllLessons = async () => {
     // Use the global database connection to fetch all documents in the 'lessons' collection
@@ -13,7 +16,7 @@ const updateLesson = async (id, updateData) => {
     return await global.db
         .collection(collectionName)
         .updateOne(
-            { _id: id }, // Filter to find the document by its ID
+            { _id: ObjectId(id) }, // Filter to find the document by its ID
             { $set: updateData } // Update the document with the provided data
         );
 };
